@@ -1,19 +1,32 @@
+# 
 import logging
-from abc import ABC,abstractmethod
+from abc import ABC, abstractmethod
 from typing import Union
+
 import numpy as np
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
 
+
 class DataStrategy(ABC):
+    """
+    Abstract Class defining strategy for handling data
+    """
 
     @abstractmethod
-    def handle_data(self,data:pd.DataFrame)->Union[pd.DataFrame,pd.Series]:
+    def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         pass
 
-class DataPreProcessing(DataStrategy):
-    def handle_Data(self, data: pd.DataFrame) -> pd.DataFrame:
+
+class DataPreprocessStrategy(DataStrategy):
+    """
+    Data preprocessing strategy which preprocesses the data.
+    """
+
+    def handle_data(self, data: pd.DataFrame) -> pd.DataFrame:
+        """
+        Removes columns which are not required, fills missing values with median average values, and converts the data type to float.
+        """
         try:
             data = data.drop(
                 [
@@ -40,7 +53,8 @@ class DataPreProcessing(DataStrategy):
         except Exception as e:
             logging.error(e)
             raise e
-        
+
+
 class DataDivideStrategy(DataStrategy):
     """
     Data dividing strategy which divides the data into train and test data.
